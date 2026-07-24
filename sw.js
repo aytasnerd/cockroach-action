@@ -4,7 +4,7 @@
 // Bump CACHE whenever the shell changes, otherwise installed copies keep
 // serving the old files.
 
-var CACHE = "cockroach-action-v8";
+var CACHE = "cockroach-action-v9";
 
 var ASSETS = [
   "./",
