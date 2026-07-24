@@ -14,8 +14,8 @@
 // you want while setting up or if Supabase is ever down.
 
 window.CA_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_KEY: "",
+  SUPABASE_URL: "https://xlztuusnaxduajgtibvg.supabase.co",
+  SUPABASE_KEY: "sb_publishable_YAsHRtbza3e4D6dJcCDv1w_GwPONU9P",
   CHAPTER: "default",
 
   // Where the app reads the demand list from when it wants to be fast.

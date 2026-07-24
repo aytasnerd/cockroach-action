@@ -124,13 +124,15 @@ var CAStore = (function () {
 
   // Reconciles one demand to a desired vote state. Used both by a live tap
   // and by the outbox replaying an intent recorded while offline.
+  //
+  // We send the desired end state rather than a toggle, so this is safe to
+  // call when the server already agrees. Do NOT re-add a local short-circuit
+  // here: toggleVote writes the optimistic state before calling this, so any
+  // check against local state matches immediately and the vote never sends.
   async function applyVoteIntent(demandId, wantVoted) {
-    var votes = getMyVotes();
-    var isVoted = !!votes[demandId];
-    if (isVoted === wantVoted) return { changed: false };
-
-    var out = await CASupabase.rpc("cast_vote", { p_demand: demandId });
+    var out = await CASupabase.rpc("cast_vote", { p_demand: demandId, p_voted: wantVoted });
     var row = Array.isArray(out) ? out[0] : out;
+    var votes = getMyVotes();
 
     if (row) {
       if (row.voted) votes[demandId] = true; else delete votes[demandId];

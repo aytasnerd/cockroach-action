@@ -244,13 +244,18 @@ begin
   return v_row;
 end $$;
 
--- Cast or retract a vote. Idempotent: calling it twice on the same demand
--- toggles the vote off, which is what the arrow in the UI expects.
-create or replace function cast_vote(p_demand uuid)
+-- Set this voter's position on a demand.
+--
+-- p_voted is the DESIRED end state, not an instruction to flip. That makes the
+-- call idempotent, which matters because the offline outbox replays intents
+-- that may already have been applied - a toggle would undo them. Pass null to
+-- toggle explicitly (what a tap on the arrow does when already in sync).
+create or replace function cast_vote(p_demand uuid, p_voted boolean default null)
 returns table (demand_id uuid, vote_count integer, voted boolean)
 language plpgsql security definer set search_path = public as $$
 declare
   v_exists boolean;
+  v_target boolean;
   v_recent integer;
 begin
   if auth.uid() is null then
@@ -273,16 +278,18 @@ begin
   select exists (select 1 from votes v where v.demand_id = p_demand and v.voter_id = auth.uid())
     into v_exists;
 
-  if v_exists then
-    delete from votes v where v.demand_id = p_demand and v.voter_id = auth.uid();
-  else
+  v_target := coalesce(p_voted, not v_exists);
+
+  if v_target and not v_exists then
     insert into votes (demand_id, voter_id, weight)
     values (p_demand, auth.uid(), 1)
     on conflict do nothing;
+  elsif not v_target and v_exists then
+    delete from votes v where v.demand_id = p_demand and v.voter_id = auth.uid();
   end if;
 
   return query
-    select d.id, d.vote_count + d.offline_votes, not v_exists
+    select d.id, d.vote_count + d.offline_votes, v_target
       from demands d where d.id = p_demand;
 end $$;
 
@@ -391,7 +398,7 @@ returns jsonb language sql stable security definer set search_path = public as $
   where c.slug = p_chapter and d.status = 'accepted';
 $$;
 
-grant execute on function cast_vote(uuid)                      to anon, authenticated;
+grant execute on function cast_vote(uuid, boolean)             to anon, authenticated;
 grant execute on function propose_demand(text, text, text)     to anon, authenticated;
 grant execute on function ensure_voter(text)                   to anon, authenticated;
 grant execute on function moderate_demand(uuid, demand_status, text) to authenticated;

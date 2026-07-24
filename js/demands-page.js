@@ -29,6 +29,14 @@
     } else if (!CASupabase.configured()) {
       statusEl.hidden = false;
       statusEl.textContent = "Read-only: no database configured yet. Voting is off.";
+    } else if (CASupabase.state() === "disabled") {
+      // Configured, but anonymous sign-ins are still switched off in the
+      // Supabase dashboard. Say so once here rather than throwing per tap.
+      statusEl.hidden = false;
+      statusEl.textContent = "Voting isn't switched on yet. The list below is current.";
+    } else if (CASupabase.state() === "error") {
+      statusEl.hidden = false;
+      statusEl.textContent = "Can't reach the database. Showing the last published list.";
     } else {
       statusEl.hidden = true;
     }
@@ -76,9 +84,15 @@
       var res = await CAStore.toggleVote(id);
       notice(res.queued ? "Saved on this phone. It'll send when you're back online." : null);
     } catch (err) {
-      var msg = /slow down/i.test(err.message || "")
-        ? "That's a lot of taps. Give it a second."
-        : "Couldn't record that vote. " + (err.message || "");
+      // PGRST202/PGRST205 mean the function or table isn't there: the database
+      // hasn't been set up. That's an operator problem, not something to
+      // explain to someone at a protest in PostgREST error codes.
+      var setupIssue = err.code === "PGRST202" || err.code === "PGRST205";
+      var msg = setupIssue
+        ? "Voting isn't set up yet on this site."
+        : /slow down/i.test(err.message || "")
+          ? "That's a lot of taps. Give it a second."
+          : "Couldn't record that vote. Try again in a moment.";
       notice(msg, true);
     } finally {
       delete busy[id];

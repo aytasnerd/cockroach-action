@@ -82,6 +82,11 @@ var CASupabase = (function () {
     return refreshing;
   }
 
+  // Why the last attempt to get a session failed, so the UI can say something
+  // specific instead of failing once per tap. Values: null (untried), "ok",
+  // "offline", "disabled" (anonymous sign-ins are off), "error".
+  var sessionState = null;
+
   // Returns a usable session, creating an anonymous one if needed.
   async function session(opts) {
     opts = opts || {};
@@ -89,19 +94,23 @@ var CASupabase = (function () {
     var s = readSession();
 
     if (s && expired(s) && s.refresh_token) s = await refresh(s);
-    if (s && !expired(s)) return s;
+    if (s && !expired(s)) { sessionState = "ok"; return s; }
     if (opts.createIfMissing === false) return null;
-    if (!navigator.onLine) return null;
+    if (!navigator.onLine) { sessionState = "offline"; return null; }
 
     try {
       // Anonymous sign-in: POST /signup with neither email nor phone.
       // Requires "Allow anonymous sign-ins" to be enabled in the dashboard.
       var fresh = await authFetch("/signup", {});
+      sessionState = "ok";
       return writeSession(fresh);
     } catch (e) {
+      sessionState = e.code === "anonymous_provider_disabled" ? "disabled" : "error";
       return null;
     }
   }
+
+  function state() { return sessionState; }
 
   // ---------------------------------------------------------------- data
 
@@ -166,6 +175,7 @@ var CASupabase = (function () {
   return {
     configured: configured,
     session: session,
+    state: state,
     currentUser: currentUser,
     signOut: signOut,
     rpc: rpc,
