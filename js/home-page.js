@@ -5,24 +5,13 @@
     return location.href.split("#")[0].replace(/index\.html$/, "");
   }
 
-  function relativeDay(iso) {
-    if (!iso) return "—";
-    var then = new Date(iso);
-    if (isNaN(then)) return "—";
-    var days = Math.floor((Date.now() - then.getTime()) / 86400000);
-    if (days <= 0) return "today";
-    if (days === 1) return "yesterday";
-    if (days < 30) return days + "d ago";
-    return then.toISOString().slice(0, 10);
-  }
-
   function paintStats() {
     var list = CAStore.getDemands();
     if (!list.length) return;
     var votes = list.reduce(function (sum, d) { return sum + (d.votes || 0); }, 0);
     document.getElementById("stat-demands").textContent = list.length;
     document.getElementById("stat-votes").textContent = votes.toLocaleString();
-    document.getElementById("stat-updated").textContent = relativeDay(CAStore.lastUpdated());
+    // stat-mps is a static count of the MP roll; leave it as authored.
   }
 
   function wireShare() {

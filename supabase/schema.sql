@@ -115,6 +115,22 @@ create table if not exists audit_log (
 
 create index if not exists audit_log_recent_idx on audit_log (created_at desc);
 
+-- Feedback and contact-backs. Name and contact are optional by design - most
+-- people leave them blank, and someone at a protest should never be required
+-- to identify themselves to say something.
+create table if not exists feedback (
+  id         bigserial primary key,
+  chapter_id uuid references chapters(id) on delete set null,
+  voter_id   uuid references voters(id) on delete set null,
+  message    text not null check (char_length(trim(message)) between 1 and 2000),
+  name       text check (name is null or char_length(name) <= 120),
+  contact    text check (contact is null or char_length(contact) <= 200),
+  handled    boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists feedback_recent_idx on feedback (created_at desc);
+
 -- ---------------------------------------------------------------- helpers
 
 create or replace function is_moderator()
@@ -173,6 +189,7 @@ alter table demands    enable row level security;
 alter table votes      enable row level security;
 alter table moderators enable row level security;
 alter table audit_log  enable row level security;
+alter table feedback   enable row level security;
 
 drop policy if exists chapters_read on chapters;
 create policy chapters_read on chapters for select using (is_active);
@@ -190,12 +207,14 @@ drop policy if exists voters_self_update on voters;
 create policy voters_self_update on voters for update
   using (id = auth.uid()) with check (id = auth.uid());
 
--- The public sees accepted demands. Moderators additionally see the queue.
--- Authors can always see their own proposal so it does not vanish on submit.
+-- The public sees accepted demands AND open proposals. Proposals are visible
+-- on purpose: people vote on them to signal which ones the chapter should take
+-- up, and that engagement is the whole point of showing them. Rejected and
+-- archived demands stay hidden from the public; moderators see everything.
 drop policy if exists demands_public_read on demands;
 create policy demands_public_read on demands for select
   using (
-    status = 'accepted'
+    status in ('accepted', 'proposed')
     or is_moderator()
     or author_id = auth.uid()
   );
@@ -218,7 +237,10 @@ drop policy if exists votes_self_write on votes;
 create policy votes_self_write on votes for insert
   with check (
     voter_id = auth.uid()
-    and exists (select 1 from demands d where d.id = demand_id and d.status = 'accepted')
+    and exists (
+      select 1 from demands d
+       where d.id = demand_id and d.status in ('accepted', 'proposed')
+    )
   );
 
 drop policy if exists votes_self_delete on votes;
@@ -230,6 +252,18 @@ create policy moderators_read on moderators for select
 
 drop policy if exists audit_read on audit_log;
 create policy audit_read on audit_log for select using (is_moderator());
+
+-- Feedback goes in only through submit_feedback(); moderators read it. Anyone,
+-- anonymous included, may leave it, but never read what others left.
+drop policy if exists feedback_no_direct_insert on feedback;
+create policy feedback_no_direct_insert on feedback for insert with check (false);
+
+drop policy if exists feedback_mod_read on feedback;
+create policy feedback_mod_read on feedback for select using (is_moderator());
+
+drop policy if exists feedback_mod_update on feedback;
+create policy feedback_mod_update on feedback for update
+  using (is_moderator()) with check (is_moderator());
 
 -- ---------------------------------------------------------------- RPC
 
@@ -408,7 +442,48 @@ returns jsonb language sql stable security definer set search_path = public as $
   where c.slug = p_chapter and d.status = 'accepted';
 $$;
 
+-- Leave feedback, with an optional name and way to reach you back. Rate
+-- limited so the box can't be flooded.
+create or replace function submit_feedback(
+  p_message text,
+  p_name text default null,
+  p_contact text default null,
+  p_chapter text default 'default'
+)
+returns void language plpgsql security definer set search_path = public as $$
+declare
+  v_chapter uuid;
+  v_recent integer;
+begin
+  if auth.uid() is null then
+    raise exception 'not authenticated' using errcode = '28000';
+  end if;
+
+  if char_length(trim(coalesce(p_message, ''))) = 0 then
+    raise exception 'empty message' using errcode = 'P0002';
+  end if;
+
+  perform ensure_voter(p_chapter);
+  select id into v_chapter from chapters where slug = p_chapter and is_active;
+
+  select count(*) into v_recent
+    from feedback f
+   where f.voter_id = auth.uid()
+     and f.created_at > now() - interval '10 minutes';
+  if v_recent >= 5 then
+    raise exception 'too much feedback too fast, try again shortly' using errcode = 'P0001';
+  end if;
+
+  insert into feedback (chapter_id, voter_id, message, name, contact)
+  values (
+    v_chapter, auth.uid(), trim(p_message),
+    nullif(trim(coalesce(p_name, '')), ''),
+    nullif(trim(coalesce(p_contact, '')), '')
+  );
+end $$;
+
 grant execute on function cast_vote(uuid, boolean)             to anon, authenticated;
+grant execute on function submit_feedback(text, text, text, text) to anon, authenticated;
 grant execute on function propose_demand(text, text, text)     to anon, authenticated;
 grant execute on function ensure_voter(text)                   to anon, authenticated;
 grant execute on function moderate_demand(uuid, demand_status, text) to authenticated;

@@ -1,14 +1,29 @@
-// Turns a demand and a contact into one-tap share links.
+// Turns text + a contact into one-tap send links.
 // No tracking, no third-party SDKs. Plain wa.me, mailto, and intent links.
+//
+// Everything here works from an editable message string, not a fixed template,
+// so the person can change a word before it opens in their own app. The demand
+// helpers below just produce a sensible starting draft.
 
 var CAActions = (function () {
-  function messageFor(demand) {
+  // A draft the sender is meant to edit. The bracketed lines are prompts they
+  // fill in or delete - leaving a way to be reached is optional on purpose.
+  function draftFor(demand, toName) {
+    var to = toName ? "To " + toName + ",\n\n" : "";
     return (
-      "Regarding: " + demand.title + "\n\n" +
-      demand.text +
-      "\n\nThis message is being sent by a member of the public asking your office to act on this. " +
-      "Please treat it as a formal request and respond with the steps being taken.\n\nSent via Cockroach Action"
+      to +
+      "I am writing as a member of the public about the following demand:\n\n" +
+      demand.title + "\n" + demand.text + "\n\n" +
+      "I am asking your office to act on this and to tell me what steps are being taken. " +
+      "Please treat this as a formal request for a response.\n\n" +
+      "[Your name - optional]\n" +
+      "[Your city - optional]\n" +
+      "[A phone or email to reach you - optional]"
     );
+  }
+
+  function subjectFor(demand) {
+    return "Action requested: " + demand.title;
   }
 
   function tweetFor(demand) {
@@ -19,17 +34,26 @@ var CAActions = (function () {
     return body + tag;
   }
 
-  function whatsappLink(demand, phone) {
-    var text = encodeURIComponent(messageFor(demand));
-    return phone
-      ? "https://wa.me/" + phone.replace(/[^\d]/g, "") + "?text=" + text
-      : "https://wa.me/?text=" + text;
+  function digits(phone) { return (phone || "").replace(/[^\d]/g, ""); }
+
+  // wa.me wants a full international number with no plus. Indian mobiles are
+  // stored as 10 digits, so prepend 91 when it looks like one.
+  function waNumber(phone) {
+    var d = digits(phone);
+    if (d.length === 10) return "91" + d;
+    return d;
   }
 
-  function mailtoLink(demand, email) {
-    var subject = encodeURIComponent("Action requested: " + demand.title);
-    var body = encodeURIComponent(messageFor(demand));
-    return "mailto:" + (email || "") + "?subject=" + subject + "&body=" + body;
+  function whatsappLink(text, phone) {
+    var t = encodeURIComponent(text);
+    var n = waNumber(phone);
+    return n ? "https://wa.me/" + n + "?text=" + t : "https://wa.me/?text=" + t;
+  }
+
+  function mailtoLink(text, email, subject) {
+    var s = encodeURIComponent(subject || "");
+    var b = encodeURIComponent(text);
+    return "mailto:" + (email || "") + "?subject=" + s + "&body=" + b;
   }
 
   function tweetLink(demand) {
@@ -37,10 +61,12 @@ var CAActions = (function () {
   }
 
   return {
-    messageFor: messageFor,
+    draftFor: draftFor,
+    subjectFor: subjectFor,
     tweetFor: tweetFor,
     whatsappLink: whatsappLink,
     mailtoLink: mailtoLink,
     tweetLink: tweetLink,
+    waNumber: waNumber,
   };
 })();

@@ -4,7 +4,7 @@
 // Bump CACHE whenever the shell changes, otherwise installed copies keep
 // serving the old files.
 
-var CACHE = "cockroach-action-v7";
+var CACHE = "cockroach-action-v8";
 
 var ASSETS = [
   "./",
@@ -23,10 +23,12 @@ var ASSETS = [
   "js/home-page.js",
   "js/demands-page.js",
   "js/act-page.js",
+  "js/contacts-page.js",
   "js/moderate-page.js",
   "js/sw-register.js",
   "data/demands.json",
   "data/contacts.json",
+  "data/mps.json",
   "data/rti-template.json",
   "manifest.json",
   "icons/mark.svg",

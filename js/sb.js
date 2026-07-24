@@ -179,7 +179,41 @@ var CASupabase = (function () {
 
   function signOut() { clearSession(); }
 
+  // If we arrived from a magic-link click, GoTrue puts the session in the URL
+  // fragment (#access_token=...&refresh_token=...). Capture it, store it, and
+  // scrub the fragment so the tokens don't linger in the address bar or in
+  // history. This makes the emailed link work as a sign-in, alongside the
+  // six-digit code flow. (For the link to land here at all, the project's
+  // Site URL must point at this site, not the default localhost:3000.)
+  function captureHashSession() {
+    if (!location.hash || location.hash.indexOf("access_token=") === -1) return false;
+    var p = new URLSearchParams(location.hash.slice(1));
+    var at = p.get("access_token");
+    if (!at) return false;
+    writeSession({
+      access_token: at,
+      refresh_token: p.get("refresh_token"),
+      expires_in: parseInt(p.get("expires_in") || "3600", 10),
+      token_type: p.get("token_type") || "bearer",
+      user: parseJwtUser(at),
+    });
+    // Remove the fragment without reloading.
+    history.replaceState(null, "", location.pathname + location.search);
+    return true;
+  }
+
+  // Minimal JWT payload decode, just enough to read the email/id for display.
+  // Not used for trust decisions - the server validates the token on every call.
+  function parseJwtUser(jwt) {
+    try {
+      var part = jwt.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      var json = JSON.parse(decodeURIComponent(escape(atob(part))));
+      return { id: json.sub, email: json.email || "", is_anonymous: !!json.is_anonymous };
+    } catch (e) { return null; }
+  }
+
   return {
+    captureHashSession: captureHashSession,
     configured: configured,
     session: session,
     state: state,

@@ -150,6 +150,12 @@
   // ------------------------------------------------------------ boot
 
   document.addEventListener("DOMContentLoaded", async function () {
+    // Handle a magic-link landing (#access_token=...) before anything else.
+    if (CASupabase.captureHashSession && CASupabase.captureHashSession()) {
+      await enterQueue();
+      return;
+    }
+
     if (!CASupabase.configured()) {
       notice("No database configured yet. Fill in js/config.js first.", true);
       show("email");

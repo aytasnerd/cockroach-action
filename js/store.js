@@ -61,14 +61,15 @@ var CAStore = (function () {
     });
   }
 
-  // One query, one index, returns a handful of columns. This is the only
-  // per-visitor database read in the whole app.
+  // One query, one index. Pulls both the accepted list and open proposals, so
+  // people can see and back proposals too. This is the only per-visitor
+  // database read in the whole app.
   async function patchLiveCounts(list) {
     if (!CASupabase.configured() || !navigator.onLine) return list;
     try {
       var rows = await CASupabase.select(
         "demands",
-        "select=id,slug,title,body,vote_count,offline_votes&status=eq.accepted&order=vote_count.desc"
+        "select=id,slug,title,body,status,vote_count,offline_votes&status=in.(accepted,proposed)&order=vote_count.desc"
       );
       if (!rows || !rows.length) return list;
       return rows.map(function (r) {
@@ -78,7 +79,7 @@ var CAStore = (function () {
           title: r.title,
           text: r.body,
           votes: (r.vote_count || 0) + (r.offline_votes || 0),
-          status: "accepted",
+          status: r.status,
         };
       });
     } catch (e) {
@@ -197,6 +198,16 @@ var CAStore = (function () {
     return { queued: false };
   }
 
+  async function submitFeedback(message, name, contact) {
+    if (!CASupabase.configured()) throw new Error("not configured");
+    return CASupabase.rpc("submit_feedback", {
+      p_message: message,
+      p_name: name || null,
+      p_contact: contact || null,
+      p_chapter: cfg.CHAPTER || "default",
+    });
+  }
+
   // Generic cached fetch for contacts + RTI template.
   async function cachedJson(url, cacheKey) {
     try {
@@ -218,6 +229,7 @@ var CAStore = (function () {
     toggleVote: toggleVote,
     applyVoteIntent: applyVoteIntent,
     propose: propose,
+    submitFeedback: submitFeedback,
     cachedJson: cachedJson,
   };
 })();

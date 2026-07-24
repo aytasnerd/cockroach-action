@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Take action — Cockroach Action</title>
+<title>Take action · Cockroach Action</title>
 <link rel="canonical" href="https://aytasnerd.github.io/cockroach-action/act.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cockroach Action">
 <meta property="og:url" content="https://aytasnerd.github.io/cockroach-action/act.html">
-<meta property="og:title" content="Take action — Cockroach Action">
+<meta property="og:title" content="Take action · Cockroach Action">
 <meta property="og:description" content="Turn any demand into a ready-to-send WhatsApp message, email, or X post, plus an RTI application under the Right to Information Act, 2005.">
 <meta property="og:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="theme-color" content="#fbfaf9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
 <script>
   (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
 </script>
@@ -72,7 +72,8 @@
   </div>
 
   <h2>Message</h2>
-  <pre class="template-preview" id="template-preview"></pre>
+  <textarea id="template-preview" spellcheck="true" style="min-height:220px;"></textarea>
+  <p class="field-note">Yours to edit before it opens. The [bracket] lines are optional. Fill them in, or delete them.</p>
   <div class="channel-row">
     <a class="channel-btn" id="wa-link" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4V4z"/></svg>
@@ -99,7 +100,8 @@
 
   <h2>RTI application (for later)</h2>
   <p class="lede">Prepares the letter text only. Filing and fees are separate steps.</p>
-  <pre class="template-preview" id="rti-preview"></pre>
+  <textarea id="rti-preview" spellcheck="true" style="min-height:300px; font-family:var(--mono); font-size:13.5px;"></textarea>
+  <p class="field-note">Fill in the [bracketed] details before you file it.</p>
   <div class="channel-row">
     <button class="channel-btn" id="copy-rti" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 011-1h10"/></svg>
@@ -121,13 +123,13 @@
   </div>
 </footer>
 
-<script src="js/config.js?v=7"></script>
-<script src="js/theme.js?v=7"></script>
-<script src="js/sb.js?v=7"></script>
-<script src="js/outbox.js?v=7"></script>
-<script src="js/store.js?v=7"></script>
-<script src="js/actions.js?v=7"></script>
-<script src="js/act-page.js?v=7"></script>
-<script src="js/sw-register.js?v=7"></script>
+<script src="js/config.js?v=8"></script>
+<script src="js/theme.js?v=8"></script>
+<script src="js/sb.js?v=8"></script>
+<script src="js/outbox.js?v=8"></script>
+<script src="js/store.js?v=8"></script>
+<script src="js/actions.js?v=8"></script>
+<script src="js/act-page.js?v=8"></script>
+<script src="js/sw-register.js?v=8"></script>
 </body>
 </html>

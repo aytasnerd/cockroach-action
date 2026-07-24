@@ -1,69 +1,59 @@
 {
-  "version": 1,
-  "updated": "2026-07-23",
-  "note": "Verify every entry before a mass mailing. Contact details for public offices change. Replace placeholders in [brackets] with your local chapter's confirmed details, and add your own city's offices below.",
+  "version": 2,
+  "note": "Official public channels, verified July 2026. Numbers and emails for public offices change; re-check on the office's own site before a mass send.",
   "groups": [
     {
-      "group": "National, official public channels",
+      "group": "File a formal grievance",
       "contacts": [
         {
-          "name": "CPGRAMS, Centralised Public Grievance Redress and Monitoring System",
-          "role": "Government of India's official public grievance portal",
+          "name": "CPGRAMS — Public Grievance Portal",
+          "role": "Government of India's official grievance system, for a complaint against any central ministry or agency",
           "email": "",
           "phone": "1800-11-3444",
-          "twitter": "",
           "website": "https://pgportal.gov.in",
-          "note": "File a formal grievance against any central ministry or agency here. Free, no login barrier for tracking."
-        },
-        {
-          "name": "National Testing Agency (NTA)",
-          "role": "Exam-conducting body named in the leak",
-          "email": "",
-          "phone": "",
-          "twitter": "",
-          "website": "https://nta.ac.in",
-          "note": "[Add the current grievance cell email or phone from the NTA site's Contact Us page. It is updated periodically.]"
-        },
-        {
-          "name": "Ministry of Education",
-          "role": "Union ministry with oversight of the testing agency",
-          "email": "",
-          "phone": "",
-          "twitter": "",
-          "website": "https://www.education.gov.in",
-          "note": "[Add current helpline/email from the ministry's Contact page.]"
+          "note": "Free. Trackable. The strongest paper trail you can create without an RTI."
         }
       ]
     },
     {
-      "group": "Your local representatives, fill this in",
+      "group": "National Testing Agency (NTA)",
       "contacts": [
         {
-          "name": "[Your local MP]",
-          "role": "Member of Parliament, [constituency]",
-          "email": "",
-          "phone": "",
-          "twitter": "",
-          "website": "",
-          "note": "Look up on https://sansad.in/ls/members and add here."
+          "name": "NTA — Public Grievance / Admin",
+          "role": "The exam-conducting body named in the leak",
+          "email": "genadmin@nta.ac.in",
+          "phone": "011-69227700",
+          "website": "https://www.nta.ac.in/ContactUs",
+          "note": "Customer support 9:30am–5:30pm on working days."
         },
         {
-          "name": "[Your local MLA]",
-          "role": "Member of Legislative Assembly, [constituency]",
+          "name": "NTA — Alternate Helpline",
+          "role": "Second NTA support line",
           "email": "",
-          "phone": "",
-          "twitter": "",
-          "website": "",
-          "note": "Look up on your state assembly's website and add here."
+          "phone": "0120-6895200",
+          "website": "https://www.nta.ac.in/ContactUs",
+          "note": "Use if the primary line does not connect."
+        }
+      ]
+    },
+    {
+      "group": "Ministry of Education",
+      "contacts": [
+        {
+          "name": "Department of Higher Education",
+          "role": "The union department with oversight of the testing agency",
+          "email": "",
+          "phone": "011-20862081",
+          "website": "https://www.education.gov.in",
+          "note": "Kartavya Bhawan 2, Central Secretariat, New Delhi 110001."
         },
         {
-          "name": "[District administration]",
-          "role": "District Magistrate / Collector office",
-          "email": "",
-          "phone": "",
-          "twitter": "",
-          "website": "",
-          "note": "Add your district's official contact."
+          "name": "Office of the Minister of Education",
+          "role": "The minister accountable for the department",
+          "email": "minister.sm@gov.in",
+          "phone": "011-24015222",
+          "website": "https://www.education.gov.in",
+          "note": "Ministerial office line and email."
         }
       ]
     }

@@ -3,106 +3,120 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Demands — Cockroach Action</title>
-<meta name="description" content="The shared demand list. Vote on what your chapter is asking for, or add a demand of your own. Works offline and catches up when you're back online.">
+<title>Demands · Cockroach Action</title>
+<meta name="description" content="The shared demand list. Back what your chapter is asking for, or add your own. Proposals are open to a vote too. Works offline and catches up when you're back online.">
 <link rel="canonical" href="https://aytasnerd.github.io/cockroach-action/demands.html">
-
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cockroach Action">
 <meta property="og:url" content="https://aytasnerd.github.io/cockroach-action/demands.html">
-<meta property="og:title" content="Demands — Cockroach Action">
-<meta property="og:description" content="Vote on what your chapter is asking for, or add a demand of your own.">
+<meta property="og:title" content="Demands · Cockroach Action">
+<meta property="og:description" content="Back what your chapter is asking for, or add your own.">
 <meta property="og:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
-
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#fbfaf9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="css/style.css?v=7">
+<meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#100f11" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="css/style.css?v=8">
 <script>
   (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
 </script>
 </head>
 <body>
-
 <header class="site">
   <div class="site-header-inner">
-    <a class="brand" href="index.html">
-      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.2C8.5 2.6 7 1.9 5.4 1.8"/><path d="M14 4.2c1.5-1.6 3-2.3 4.6-2.4"/><ellipse cx="12" cy="6.2" rx="2.5" ry="2"/><path d="M12 8.2c3.6 0 5 2.8 5 6.2 0 4-2.2 7.2-5 7.2s-5-3.2-5-7.2c0-3.4 1.4-6.2 5-6.2Z"/><path d="M12 9.6v10"/><path d="M7.4 10.6 3.0 7.8"/><path d="M6.9 14.4 2.3 14.1"/><path d="M7.6 18 3.7 21.0"/><path d="M16.6 10.6 21.0 7.8"/><path d="M17.1 14.4 21.7 14.1"/><path d="M16.4 18 20.3 21.0"/></svg>
-      <span class="brand-text">Cockroach Action</span>
-    </a>
+    <a class="brand" href="index.html"><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.2C8.5 2.6 7 1.9 5.4 1.8"/><path d="M14 4.2c1.5-1.6 3-2.3 4.6-2.4"/><ellipse cx="12" cy="6.2" rx="2.5" ry="2"/><path d="M12 8.2c3.6 0 5 2.8 5 6.2 0 4-2.2 7.2-5 7.2s-5-3.2-5-7.2c0-3.4 1.4-6.2 5-6.2Z"/><path d="M12 9.6v10"/><path d="M7.4 10.6 3.0 7.8"/><path d="M6.9 14.4 2.3 14.1"/><path d="M7.6 18 3.7 21.0"/><path d="M16.6 10.6 21.0 7.8"/><path d="M17.1 14.4 21.7 14.1"/><path d="M16.4 18 20.3 21.0"/></svg><span class="brand-text">Cockroach Action</span></a>
     <nav class="primary" aria-label="Primary">
       <a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span class="label">Home</span></a>
       <a href="demands.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V4"/><path d="M4 5h13l-2 3.5L17 12H4"/></svg><span class="label">Demands</span></a>
       <a href="act.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5"/><path d="M21 3l-6.5 18-4-8-8-4Z"/></svg><span class="label">Act</span></a>
       <a href="contacts.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span class="label">Contacts</span></a>
     </nav>
-    <button class="theme-toggle" data-theme-toggle aria-pressed="false">Dark</button>
+    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
   </div>
 </header>
 
 <main>
   <h1>Demands</h1>
-  <p class="lede">Tap the arrow to back a demand. The number is the total across everyone who has voted.</p>
+  <p class="lede">Back what belongs, add what's missing. The count is everyone's, added up.</p>
 
   <div class="status-line" id="status-line" hidden></div>
   <div class="notice" id="notice" hidden></div>
 
-  <div class="demand-meta" style="margin:20px 0 16px; justify-content:space-between;">
-    <span>
-      <label for="sort" class="sr-only">Sort by</label>
-      <select id="sort" style="width:auto; margin:0;">
-        <option value="votes">Most support</option>
-        <option value="new">Newest</option>
-      </select>
-    </span>
+  <div id="cloud-wrap" hidden>
+    <h2>What people are behind</h2>
+    <div id="cloud" class="cloud" aria-hidden="true"></div>
+  </div>
+
+  <div class="controls">
+    <span class="finder-count" id="tally">&nbsp;</span>
     <span class="btn-row" style="margin:0;">
-      <button class="btn" data-export-outbox>Export mine</button>
-      <button class="btn btn-primary" id="propose-toggle">Add a demand</button>
+      <button class="btn" data-export-outbox type="button">Export mine</button>
+      <button class="btn btn-primary" id="propose-toggle" type="button">Add a demand</button>
     </span>
   </div>
 
-  <form id="propose-form" hidden style="border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin-bottom:18px;">
+  <form id="propose-form" class="form-block" hidden>
     <label for="p-title">What are you asking for?</label>
     <input type="text" id="p-title" maxlength="120" required placeholder="Independent probe into the exam leak">
     <p class="field-note">One clear ask, 8 to 120 characters.</p>
-
     <label for="p-body">Say it the way it should be sent</label>
     <textarea id="p-body" maxlength="1000" required placeholder="An independent, time-bound investigation into how the paper leaked, with findings made public."></textarea>
     <p class="field-note">This becomes the message sent to officials. 20 to 1000 characters.</p>
-
     <div class="btn-row" style="margin-top:0;">
       <button type="submit" class="btn btn-primary" id="propose-submit">Send to the queue</button>
       <button type="button" class="btn" id="propose-cancel">Cancel</button>
     </div>
-    <p class="field-note" style="margin-top:12px; margin-bottom:0;">Organizers read the queue and publish what belongs on the list.</p>
   </form>
 
-  <ul class="demand-list" id="demand-list" aria-live="polite">
-    <li class="skeleton"></li>
-    <li class="skeleton"></li>
+  <h2 id="accepted-head">Up for a vote</h2>
+  <ul class="demand-list" id="accepted-list" aria-live="polite">
     <li class="skeleton"></li>
   </ul>
+
+  <section id="proposed-section" hidden>
+    <h2>Proposed, waiting to be taken up</h2>
+    <p class="field-note" style="margin-top:-8px;">Anyone can add these. Back the ones worth taking up. Organizers publish what gets traction.</p>
+    <ul class="demand-list" id="proposed-list"></ul>
+  </section>
+
+  <h2>Tell the organizers something</h2>
+  <p class="field-note" style="margin-top:-8px;">A note, a correction, or a demand you'd rather send privately. Your name and a way to reach you are optional.</p>
+  <form id="feedback-form" class="form-block">
+    <label for="f-msg">Your message</label>
+    <textarea id="f-msg" maxlength="2000" required placeholder="What's on your mind?"></textarea>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <label for="f-name">Name (optional)</label>
+        <input type="text" id="f-name" maxlength="120" autocomplete="name">
+      </div>
+      <div>
+        <label for="f-contact">Phone or email to reach you (optional)</label>
+        <input type="text" id="f-contact" maxlength="200" autocomplete="email">
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:0;">
+      <button type="submit" class="btn btn-primary" id="f-submit">Send</button>
+    </div>
+  </form>
 </main>
 
 <footer class="site">
   <div class="wrap">
     <div>Your vote is tied to this device. No name, no phone number, no account.</div>
-    <div><a href="moderate.html">Organizer sign-in</a></div>
+    <div><a href="index.html">Home</a> · <a href="contacts.html">Find your MP</a> · <a href="moderate.html">Organizer sign-in</a></div>
   </div>
 </footer>
 
-<script src="js/config.js?v=7"></script>
-<script src="js/theme.js?v=7"></script>
-<script src="js/sb.js?v=7"></script>
-<script src="js/outbox.js?v=7"></script>
-<script src="js/store.js?v=7"></script>
-<script src="js/demands-page.js?v=7"></script>
-<script src="js/sw-register.js?v=7"></script>
+<script src="js/config.js?v=8"></script>
+<script src="js/theme.js?v=8"></script>
+<script src="js/sb.js?v=8"></script>
+<script src="js/outbox.js?v=8"></script>
+<script src="js/store.js?v=8"></script>
+<script src="js/demands-page.js?v=8"></script>
+<script src="js/sw-register.js?v=8"></script>
 </body>
 </html>
