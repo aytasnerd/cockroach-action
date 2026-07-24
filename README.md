@@ -71,15 +71,19 @@ they already cast.
 **1. Create the database.** New Supabase project → SQL Editor → paste
 `supabase/schema.sql` → Run.
 
-**2. Turn on anonymous sign-ins.** Authentication → Sign In / Providers →
+**2. Seed the list.** SQL Editor → paste `supabase/seed.sql` → Run. This moves
+the starting demands into the database. Existing counts land in `offline_votes`,
+so a live vote adds to them rather than resetting them.
+
+**3. Turn on anonymous sign-ins.** Authentication → Sign In / Providers →
 "Allow anonymous sign-ins". Without this nobody can vote.
 
-**3. Point the site at it.** Fill in `js/config.js` with your Project URL and
+**4. Point the site at it.** Fill in `js/config.js` with your Project URL and
 the publishable (anon) key from Project Settings → API. That key is meant to be
 public; all access control lives in the RLS policies. Never put the
 `service_role` / `sb_secret_` key in this file.
 
-**4. Make yourself an organizer.** Open `/moderate.html`, sign in with your
+**5. Make yourself an organizer.** Open `/moderate.html`, sign in with your
 email once so an auth user exists, then run in the SQL editor:
 
 ```sql
@@ -90,12 +94,12 @@ select u.id, c.id, 'admin'
 on conflict (id) do update set role = 'admin';
 ```
 
-**5. Wire up the snapshot.** Add repository secrets `SUPABASE_URL` and
+**6. Wire up the snapshot.** Add repository secrets `SUPABASE_URL` and
 `SUPABASE_SERVICE_KEY` (Settings → Secrets and variables → Actions). The
 workflow runs every 15 minutes and refuses to publish an empty list, so a
 transient fault can't blank the public demand list.
 
-Until step 3 is done the site runs read-only off the committed snapshot and
+Until step 4 is done the site runs read-only off the committed snapshot and
 says so plainly instead of pretending to record votes.
 
 ## Scale
