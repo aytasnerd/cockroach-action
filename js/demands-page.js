@@ -119,9 +119,16 @@
         ? "Saved on this phone. It'll go to the queue when you're back online."
         : "Sent to the queue. An organizer will review it.");
     } catch (err) {
-      notice(/limit/i.test(err.message || "")
-        ? "You've added a few already. Try again in an hour."
-        : "Couldn't send that. " + (err.message || ""), true);
+      // Don't leak Postgres internals to someone at a protest. A missing
+      // function or table is a setup problem for the operator, not something
+      // the person tapping the button can act on.
+      var setupIssue = err.code === "PGRST202" || err.code === "PGRST205" ||
+                       /does not exist|schema cache/i.test(err.message || "");
+      notice(setupIssue
+        ? "Adding demands isn't set up yet on this site."
+        : /limit/i.test(err.message || "")
+          ? "You've added a few already. Try again in an hour."
+          : "Couldn't send that. Try again in a moment.", true);
     } finally {
       submit.disabled = false;
     }

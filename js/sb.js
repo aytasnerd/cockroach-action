@@ -153,9 +153,16 @@ var CASupabase = (function () {
 
   // ---------------------------------------------------------------- moderators
 
-  // Email code sign-in. create_user:false means a typo cannot mint an account.
+  // Email code sign-in.
+  //
+  // create_user is true because signing in grants nothing on its own: the
+  // moderation queue checks for a row in `moderators`, and every privileged
+  // action is gated by is_moderator() inside the database. Setting it false
+  // made the first moderator impossible to bootstrap - you cannot be added to
+  // `moderators` until an auth user exists, and no auth user could ever be
+  // created. Account creation here is not authorization.
   function sendLoginCode(email) {
-    return authFetch("/otp", { email: email, create_user: false });
+    return authFetch("/otp", { email: email, create_user: true });
   }
 
   async function verifyLoginCode(email, token) {

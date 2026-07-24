@@ -83,8 +83,10 @@ the publishable (anon) key from Project Settings → API. That key is meant to b
 public; all access control lives in the RLS policies. Never put the
 `service_role` / `sb_secret_` key in this file.
 
-**5. Make yourself an organizer.** Open `/moderate.html`, sign in with your
-email once so an auth user exists, then run in the SQL editor:
+**5. Make yourself an organizer.** Open `/moderate.html` and sign in with your
+email. You'll be told the account isn't an organizer yet, and shown the exact
+statement to run — signing in only creates an auth user, it grants nothing.
+Run it in the SQL editor, then sign in again:
 
 ```sql
 insert into moderators (id, chapter_id, role)

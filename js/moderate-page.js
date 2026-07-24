@@ -122,6 +122,28 @@
     if (!user) { show("email"); return; }
     el("who").textContent = user.email || "signed in";
     show("queue");
+
+    // Being signed in is not being an organizer. Say which one this is,
+    // otherwise a non-moderator just sees an empty queue and assumes it works.
+    var rows = [];
+    try { rows = await CASupabase.select("moderators", "select=role") || []; } catch (e) { /* treated as not a moderator */ }
+
+    if (!rows.length) {
+      el("queue").innerHTML =
+        '<div class="empty">You are signed in as <strong>' + esc(user.email || "") + '</strong>, ' +
+        'but this account is not an organizer yet.<br><br>' +
+        'An admin needs to add it in the Supabase SQL editor:' +
+        '<pre class="template-preview" style="text-align:left; margin-top:12px;">' +
+        'insert into moderators (id, chapter_id, role)\n' +
+        'select u.id, c.id, \'admin\'\n' +
+        '  from auth.users u, chapters c\n' +
+        ' where u.email = ' + esc("'" + (user.email || "") + "'") + '\n' +
+        '   and c.slug = \'default\'\n' +
+        'on conflict (id) do update set role = \'admin\';</pre></div>';
+      el("recent").innerHTML = "";
+      return;
+    }
+
     await loadQueue();
   }
 
