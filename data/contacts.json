@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "updated": "2026-07-23",
+  "note": "Verify every entry before a mass mailing. Contact details for public offices change. Replace placeholders in [brackets] with your local chapter's confirmed details, and add your own city's offices below.",
+  "groups": [
+    {
+      "group": "National, official public channels",
+      "contacts": [
+        {
+          "name": "CPGRAMS, Centralised Public Grievance Redress and Monitoring System",
+          "role": "Government of India's official public grievance portal",
+          "email": "",
+          "phone": "1800-11-3444",
+          "twitter": "",
+          "website": "https://pgportal.gov.in",
+          "note": "File a formal grievance against any central ministry or agency here. Free, no login barrier for tracking."
+        },
+        {
+          "name": "National Testing Agency (NTA)",
+          "role": "Exam-conducting body named in the leak",
+          "email": "",
+          "phone": "",
+          "twitter": "",
+          "website": "https://nta.ac.in",
+          "note": "[Add the current grievance cell email or phone from the NTA site's Contact Us page. It is updated periodically.]"
+        },
+        {
+          "name": "Ministry of Education",
+          "role": "Union ministry with oversight of the testing agency",
+          "email": "",
+          "phone": "",
+          "twitter": "",
+          "website": "https://www.education.gov.in",
+          "note": "[Add current helpline/email from the ministry's Contact page.]"
+        }
+      ]
+    },
+    {
+      "group": "Your local representatives, fill this in",
+      "contacts": [
+        {
+          "name": "[Your local MP]",
+          "role": "Member of Parliament, [constituency]",
+          "email": "",
+          "phone": "",
+          "twitter": "",
+          "website": "",
+          "note": "Look up on https://sansad.in/ls/members and add here."
+        },
+        {
+          "name": "[Your local MLA]",
+          "role": "Member of Legislative Assembly, [constituency]",
+          "email": "",
+          "phone": "",
+          "twitter": "",
+          "website": "",
+          "note": "Look up on your state assembly's website and add here."
+        },
+        {
+          "name": "[District administration]",
+          "role": "District Magistrate / Collector office",
+          "email": "",
+          "phone": "",
+          "twitter": "",
+          "website": "",
+          "note": "Add your district's official contact."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "updated": "2026-07-23",
+  "demands": [
+    {
+      "id": "d1",
+      "title": "Independent probe into the exam leak",
+      "text": "An independent, time-bound investigation (not run by the same agency implicated) into how the exam paper was leaked, with findings made public.",
+      "votes": 128
+    },
+    {
+      "id": "d2",
+      "title": "Structural reform of the testing agency",
+      "text": "A public audit of the exam-conducting body's security, vendor contracts, and IT systems, with a published corrective action plan and independent oversight going forward.",
+      "votes": 104
+    },
+    {
+      "id": "d3",
+      "title": "Fair re-exam for affected candidates",
+      "text": "A re-test on a fixed near-term date for every candidate whose exam was compromised, with travel and fee costs covered by the conducting body, not the students.",
+      "votes": 97
+    },
+    {
+      "id": "d4",
+      "title": "Accountability at the top",
+      "text": "Named accountability for the officials and ministers responsible for oversight failures, decided through due process rather than announcement.",
+      "votes": 85
+    },
+    {
+      "id": "d5",
+      "title": "Right to Information disclosure",
+      "text": "Suo motu publication of the leak investigation's terms of reference, timeline, and interim findings under the Right to Information Act, without requiring individual RTI requests.",
+      "votes": 76
+    },
+    {
+      "id": "d6",
+      "title": "Protection for whistleblowers and students",
+      "text": "No disciplinary, academic, or legal action against students or staff who came forward with evidence of the leak or joined peaceful protests about it.",
+      "votes": 69
+    },
+    {
+      "id": "d7",
+      "title": "Tamper-proof exam process going forward",
+      "text": "End-to-end digital chain of custody for question papers, with independent audit logs, before the next exam cycle.",
+      "votes": 54
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "RTI Application, Right to Information Act, 2005",
+  "body": "To,\nThe Public Information Officer,\n[Name of the public authority, e.g. National Testing Agency]\n[Office address]\n\nSubject: Request for information under Section 6(1) of the Right to Information Act, 2005\n\nSir/Madam,\n\nI, [Your full name], resident of [Your address], wish to seek the following information regarding [subject of the demand, e.g. the investigation into the exam paper leak dated ___]:\n\n1. [Specific question one. Example: the date on which the leak was first reported to the authority]\n2. [Specific question two. Example: copies of any internal audit or inquiry report prepared so far]\n3. [Specific question three. Example: the names and designations of the committee constituted to investigate the matter]\n4. [Add further specific, answerable questions. Vague requests are more likely to be rejected]\n\nI am enclosing the prescribed fee of Rs. 10/- by [postal order, demand draft, or online payment, as applicable]. If I qualify for a fee exemption (e.g. Below Poverty Line), I am enclosing proof of the same.\n\nKindly provide the requested information within 30 days as mandated under the Act, or 48 hours if the information concerns the life or liberty of a person.\n\nThank you.\n\nYours faithfully,\n[Your full name]\n[Your contact number and email]\n[Date]",
+  "guidance": [
+    "Ask specific, factual questions: what, when, how many, copies of. Not opinions or why questions, which PIOs can lawfully decline.",
+    "One subject per application works best. File separate RTIs for unrelated demands.",
+    "Keep a copy and the fee receipt. If there is no reply in 30 days, or the reply is unsatisfactory, you can file a First Appeal with the same public authority, then a Second Appeal with the Central or State Information Commission.",
+    "This generator only prepares the letter text. Filing (by post or the online RTI portal) and the fee payment are separate steps for you to complete."
+  ]
+}

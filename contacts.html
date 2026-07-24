@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contacts, Cockroach Action</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#533a75">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
+</script>
+</head>
+<body>
+<header class="site">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html"><span class="mark">C</span><span class="brand-text"> Cockroach Action</span></a>
+    <nav class="primary" aria-label="Primary">
+      <a href="index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        <span class="label">Home</span>
+      </a>
+      <a href="demands.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>
+        <span class="label">Demands</span>
+      </a>
+      <a href="act.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2"/></svg>
+        <span class="label">Act</span>
+      </a>
+      <a href="contacts.html" aria-current="page">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/><path d="M7 13h3M7 16h5"/></svg>
+        <span class="label">Contacts</span>
+      </a>
+    </nav>
+    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
+  </div>
+</header>
+<div class="path-bar"><div class="wrap">~/cockroach-action/contacts</div></div>
+
+<main>
+  <h1>Contacts</h1>
+  <p class="lede">Edit <code>data/contacts.json</code> to update this list.</p>
+  <div id="contact-groups"></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Verify details before a mass mailing.</span>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/store.js"></script>
+<script>
+  async function loadContacts() {
+    var el = document.getElementById("contact-groups");
+    try {
+      var json = await CAStore.cachedJsonFetch("data/contacts.json", "ca_contacts_cache");
+      if (!json) throw new Error("no cached copy yet");
+      el.innerHTML = "";
+      json.groups.forEach(function (g) {
+        var h = document.createElement("h2");
+        h.textContent = g.group;
+        el.appendChild(h);
+        g.contacts.forEach(function (c) {
+          var card = document.createElement("div");
+          card.className = "card";
+          var lines = [];
+          if (c.role) lines.push('<div class="demand-meta"><span>' + esc(c.role) + '</span></div>');
+          if (c.email) lines.push('<div>Email: <a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></div>');
+          if (c.phone) lines.push('<div>Phone: <a href="tel:' + esc(c.phone) + '">' + esc(c.phone) + '</a></div>');
+          if (c.twitter) lines.push('<div>X: <a href="https://twitter.com/' + esc(c.twitter.replace("@","")) + '" target="_blank" rel="noopener">@' + esc(c.twitter.replace("@","")) + '</a></div>');
+          if (c.website) lines.push('<div>Web: <a href="' + esc(c.website) + '" target="_blank" rel="noopener">' + esc(c.website) + '</a></div>');
+          if (c.note) lines.push('<p style="margin-top:8px; color:var(--text-muted); font-size:13px;">' + esc(c.note) + '</p>');
+          card.innerHTML = "<h3>" + esc(c.name) + "</h3>" + lines.join("");
+          el.appendChild(card);
+        });
+      });
+    } catch (e) {
+      el.innerHTML = '<p class="lede">Not cached yet. Connect once to load, then this works offline too.</p>';
+    }
+  }
+  function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+  document.addEventListener("DOMContentLoaded", loadContacts);
+</script>
+<script src="js/sw-register.js"></script>
+</body>
+</html>

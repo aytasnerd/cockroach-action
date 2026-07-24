@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Take action, Cockroach Action</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#533a75">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
+</script>
+</head>
+<body>
+<header class="site">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html"><span class="mark">C</span><span class="brand-text"> Cockroach Action</span></a>
+    <nav class="primary" aria-label="Primary">
+      <a href="index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        <span class="label">Home</span>
+      </a>
+      <a href="demands.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>
+        <span class="label">Demands</span>
+      </a>
+      <a href="act.html" aria-current="page">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2"/></svg>
+        <span class="label">Act</span>
+      </a>
+      <a href="contacts.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/><path d="M7 13h3M7 16h5"/></svg>
+        <span class="label">Contacts</span>
+      </a>
+    </nav>
+    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
+  </div>
+</header>
+<div class="path-bar"><div class="wrap">~/cockroach-action/act</div></div>
+
+<main>
+  <h1>Take action</h1>
+  <p class="lede">Pick a demand and a contact, then send.</p>
+
+  <label for="demand-picker">Demand</label>
+  <select id="demand-picker"></select>
+
+  <label for="contact-picker">Target</label>
+  <select id="contact-picker"><option value="">Loading</option></select>
+
+  <div class="two-col">
+    <div>
+      <label for="target-email">Email (optional)</label>
+      <input type="email" id="target-email" placeholder="office@example.gov.in">
+    </div>
+    <div>
+      <label for="target-phone">WhatsApp (optional)</label>
+      <input type="tel" id="target-phone" placeholder="+91">
+    </div>
+  </div>
+
+  <h2>Message</h2>
+  <pre class="template-preview" id="template-preview"></pre>
+  <div class="channel-row">
+    <a class="channel-btn" id="wa-link" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4V4z"/></svg>
+      WhatsApp
+    </a>
+    <a class="channel-btn" id="mail-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 6l9 7 9-7"/></svg>
+      Email
+    </a>
+    <button class="channel-btn" id="copy-message" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 011-1h10"/></svg>
+      Copy
+    </button>
+    <span class="copy-feedback" id="msg-copy-feedback">Copied</span>
+  </div>
+
+  <h2>Post it</h2>
+  <pre class="template-preview" id="tweet-preview"></pre>
+  <div class="channel-row">
+    <a class="channel-btn" id="tweet-link" target="_blank" rel="noopener">Post on X</a>
+  </div>
+
+  <hr class="divider">
+
+  <h2>RTI application (for later)</h2>
+  <p class="lede">Prepares the letter text only. Filing and fees are separate steps.</p>
+  <pre class="template-preview" id="rti-preview"></pre>
+  <div class="channel-row">
+    <button class="channel-btn" id="copy-rti" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 011-1h10"/></svg>
+      Copy
+    </button>
+    <button class="channel-btn" id="download-rti" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Download
+    </button>
+    <span class="copy-feedback" id="rti-copy-feedback">Copied</span>
+  </div>
+  <h3 style="margin-top:20px;">Before you file</h3>
+  <ul id="rti-guidance" style="color:var(--text-muted); font-size:14px;"></ul>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Templates are drafts. Read before sending.</span>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/store.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/act-page.js"></script>
+<script src="js/sw-register.js"></script>
+</body>
+</html>

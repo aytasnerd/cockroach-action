@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockroach Action</title>
+<meta name="description" content="Offline demand tracking and one-tap civic action for local chapters.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#533a75">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
+</script>
+</head>
+<body>
+<header class="site">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html"><span class="mark">C</span><span class="brand-text"> Cockroach Action</span></a>
+    <nav class="primary" aria-label="Primary">
+      <a href="index.html" aria-current="page">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        <span class="label">Home</span>
+      </a>
+      <a href="demands.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>
+        <span class="label">Demands</span>
+      </a>
+      <a href="act.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2"/></svg>
+        <span class="label">Act</span>
+      </a>
+      <a href="contacts.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/><path d="M7 13h3M7 16h5"/></svg>
+        <span class="label">Contacts</span>
+      </a>
+    </nav>
+    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
+  </div>
+</header>
+<div class="path-bar"><div class="wrap">~/cockroach-action</div></div>
+
+<main>
+  <h1>One demand list. One tap to act.</h1>
+  <p class="lede">Works offline at the protest site. Catches up the moment you're back online.</p>
+
+  <div class="pillar-grid">
+    <div class="pillar">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>
+      <h3>On the ground</h3>
+      <p>Vote or add a demand with zero signal. Saves to your phone.</p>
+      <a class="btn" href="demands.html">Open demands</a>
+    </div>
+    <div class="pillar">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2"/></svg>
+      <h3>Online</h3>
+      <p>One-tap WhatsApp, email, and X messages to public authorities.</p>
+      <a class="btn" href="act.html">Take action</a>
+    </div>
+    <div class="pillar">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/><path d="M7 13h3M7 16h5"/></svg>
+      <h3>Contacts</h3>
+      <p>Public grievance channels and your chapter's own representatives.</p>
+      <a class="btn" href="contacts.html">View contacts</a>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2>The swarm decides</h2>
+  <p>No admin approves a demand before it counts. Anyone can vote or add one, online or off. The count you see is what people actually chose, not what an office picked for them.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Cockroach Action. An independent chapter tool, not affiliated with any political party.</span>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/sw-register.js"></script>
+</body>
+</html>
