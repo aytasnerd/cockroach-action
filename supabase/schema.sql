@@ -14,7 +14,9 @@
 --  * Anonymous users are real auth users (auth.uid() is stable), so upgrading
 --    an anonymous voter to a phone identity preserves every vote they cast.
 
-create extension if not exists pgcrypto;
+-- No extensions required. gen_random_uuid() is core Postgres since 13, and
+-- nothing here depends on pgcrypto - see the note on make_slug() below for
+-- why depending on it would be a trap under Supabase's schema layout.
 
 -- ---------------------------------------------------------------- types
 
@@ -126,12 +128,20 @@ returns boolean language sql stable as $$
 $$;
 
 -- Slug that stays readable and collision-resistant without a lookup loop.
+--
+-- Deliberately avoids pgcrypto's gen_random_bytes(): Supabase installs
+-- extensions into the `extensions` schema, and the callers below run with
+-- `set search_path = public`, so an unqualified pgcrypto call resolves at
+-- CREATE time but fails at CALL time. md5(random()) needs no extension.
+--
+-- VOLATILE, not IMMUTABLE - it is random, and marking it immutable would
+-- invite the planner to fold repeated calls into a single value.
 create or replace function make_slug(raw text)
-returns text language sql immutable as $$
+returns text language sql volatile as $$
   select left(
     regexp_replace(lower(trim(raw)), '[^a-z0-9]+', '-', 'g'),
     48
-  ) || '-' || substr(encode(gen_random_bytes(3), 'hex'), 1, 6);
+  ) || '-' || substr(md5(random()::text || clock_timestamp()::text), 1, 6);
 $$;
 
 -- ------------------------------------------------- materialized vote counter
