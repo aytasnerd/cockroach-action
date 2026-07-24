@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /moderate.html
+
+Sitemap: https://aytasnerd.github.io/cockroach-action/sitemap.xml

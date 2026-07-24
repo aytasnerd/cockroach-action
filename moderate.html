@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organizer sign-in — Cockroach Action</title>
+<meta name="description" content="Organizer sign-in for reviewing proposed demands.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#fbfaf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="css/style.css?v=5">
+<script>
+  (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
+</script>
+</head>
+<body>
+
+<header class="site">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.2C8.5 2.6 7 1.9 5.4 1.8"/><path d="M14 4.2c1.5-1.6 3-2.3 4.6-2.4"/><ellipse cx="12" cy="6.2" rx="2.5" ry="2"/><path d="M12 8.2c3.6 0 5 2.8 5 6.2 0 4-2.2 7.2-5 7.2s-5-3.2-5-7.2c0-3.4 1.4-6.2 5-6.2Z"/><path d="M12 9.6v10"/><path d="M7.4 10.6 3.0 7.8"/><path d="M6.9 14.4 2.3 14.1"/><path d="M7.6 18 3.7 21.0"/><path d="M16.6 10.6 21.0 7.8"/><path d="M17.1 14.4 21.7 14.1"/><path d="M16.4 18 20.3 21.0"/></svg>
+      <span class="brand-text">Cockroach Action</span>
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="index.html"><span class="label">Home</span></a>
+      <a href="demands.html"><span class="label">Demands</span></a>
+    </nav>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false">Dark</button>
+  </div>
+</header>
+
+<main>
+  <h1>Organizer sign-in</h1>
+  <p class="lede">For the few people who review what gets added to the demand list.</p>
+
+  <div class="notice" id="notice" hidden></div>
+
+  <!-- step 1: ask for the email -->
+  <form id="email-form" class="card" style="max-width:420px;">
+    <label for="mod-email">Your email</label>
+    <input type="email" id="mod-email" required autocomplete="email" placeholder="you@example.com">
+    <p class="field-note">We send a six-digit code. Only addresses already added as organizers can sign in.</p>
+    <button type="submit" class="btn btn-primary" id="send-code">Send code</button>
+  </form>
+
+  <!-- step 2: verify the code -->
+  <form id="code-form" class="card" style="max-width:420px;" hidden>
+    <label for="mod-code">Six-digit code</label>
+    <input type="text" id="mod-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required placeholder="123456">
+    <div class="btn-row" style="margin-top:0;">
+      <button type="submit" class="btn btn-primary" id="verify-code">Sign in</button>
+      <button type="button" class="btn" id="back-to-email">Use a different email</button>
+    </div>
+  </form>
+
+  <!-- step 3: the queue -->
+  <section id="queue-section" hidden>
+    <div class="demand-meta" style="justify-content:space-between; margin-bottom:16px;">
+      <span id="who" class="tag"></span>
+      <button class="btn" id="sign-out">Sign out</button>
+    </div>
+
+    <h2 style="margin-top:0;">Waiting for review</h2>
+    <div id="queue"></div>
+
+    <h2>Recently decided</h2>
+    <div id="recent"></div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>Every decision is written to an audit log and mirrored into the repository.</div>
+  </div>
+</footer>
+
+<script src="js/config.js?v=5"></script>
+<script src="js/theme.js?v=5"></script>
+<script src="js/sb.js?v=5"></script>
+<script src="js/moderate-page.js?v=5"></script>
+</body>
+</html>

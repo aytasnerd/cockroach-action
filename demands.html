@@ -3,115 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demands, Cockroach Action</title>
+
+<title>Demands — Cockroach Action</title>
+<meta name="description" content="The shared demand list. Vote on what your chapter is asking for, or add a demand of your own. Works offline and catches up when you're back online.">
+<link rel="canonical" href="https://aytasnerd.github.io/cockroach-action/demands.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cockroach Action">
+<meta property="og:url" content="https://aytasnerd.github.io/cockroach-action/demands.html">
+<meta property="og:title" content="Demands — Cockroach Action">
+<meta property="og:description" content="Vote on what your chapter is asking for, or add a demand of your own.">
+<meta property="og:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
+
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192.png">
-<meta name="theme-color" content="#533a75">
-<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#fbfaf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="css/style.css?v=5">
 <script>
   (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
 </script>
 </head>
 <body>
+
 <header class="site">
   <div class="site-header-inner">
-    <a class="brand" href="index.html"><span class="mark">C</span><span class="brand-text"> Cockroach Action</span></a>
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.2C8.5 2.6 7 1.9 5.4 1.8"/><path d="M14 4.2c1.5-1.6 3-2.3 4.6-2.4"/><ellipse cx="12" cy="6.2" rx="2.5" ry="2"/><path d="M12 8.2c3.6 0 5 2.8 5 6.2 0 4-2.2 7.2-5 7.2s-5-3.2-5-7.2c0-3.4 1.4-6.2 5-6.2Z"/><path d="M12 9.6v10"/><path d="M7.4 10.6 3.0 7.8"/><path d="M6.9 14.4 2.3 14.1"/><path d="M7.6 18 3.7 21.0"/><path d="M16.6 10.6 21.0 7.8"/><path d="M17.1 14.4 21.7 14.1"/><path d="M16.4 18 20.3 21.0"/></svg>
+      <span class="brand-text">Cockroach Action</span>
+    </a>
     <nav class="primary" aria-label="Primary">
-      <a href="index.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
-        <span class="label">Home</span>
-      </a>
-      <a href="demands.html" aria-current="page">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/></svg>
-        <span class="label">Demands</span>
-      </a>
-      <a href="act.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2"/></svg>
-        <span class="label">Act</span>
-      </a>
-      <a href="contacts.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/><path d="M7 13h3M7 16h5"/></svg>
-        <span class="label">Contacts</span>
-      </a>
+      <a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span class="label">Home</span></a>
+      <a href="demands.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V4"/><path d="M4 5h13l-2 3.5L17 12H4"/></svg><span class="label">Demands</span></a>
+      <a href="act.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5"/><path d="M21 3l-6.5 18-4-8-8-4Z"/></svg><span class="label">Act</span></a>
+      <a href="contacts.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span class="label">Contacts</span></a>
     </nav>
-    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false">Dark</button>
   </div>
 </header>
-<div class="path-bar"><div class="wrap">~/cockroach-action/demands</div></div>
 
 <main>
   <h1>Demands</h1>
-  <p class="lede">Vote or add a demand. Works offline, refreshes when you're back online.</p>
+  <p class="lede">Tap the arrow to back a demand. The number is the total across everyone who has voted.</p>
 
-  <p id="status-line" class="status-line" hidden>Offline. Showing what's saved on this phone.</p>
+  <div class="status-line" id="status-line" hidden></div>
+  <div class="notice" id="notice" hidden></div>
 
-  <div class="btn-row" style="justify-content: space-between; align-items:center;">
-    <label for="sort-select" style="margin:0; font-weight:400; color:var(--text-muted); font-size:14px;">
-      Sort by
-      <select id="sort-select" style="width:auto; display:inline-block; margin-left:6px; margin-bottom:0;">
+  <div class="demand-meta" style="margin:20px 0 16px; justify-content:space-between;">
+    <span>
+      <label for="sort" class="sr-only">Sort by</label>
+      <select id="sort" style="width:auto; margin:0;">
         <option value="votes">Most support</option>
-        <option value="new">Newest first</option>
+        <option value="new">Newest</option>
       </select>
-    </label>
-    <div style="display:flex; gap:8px;">
-      <button class="btn" data-export-outbox type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-        Export mine
-      </button>
-      <button class="btn btn-primary" id="propose-toggle" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        Propose
-      </button>
-    </div>
+    </span>
+    <span class="btn-row" style="margin:0;">
+      <button class="btn" data-export-outbox>Export mine</button>
+      <button class="btn btn-primary" id="propose-toggle">Add a demand</button>
+    </span>
   </div>
 
-  <form id="propose-form" hidden style="margin-top:16px;">
-    <fieldset>
-      <legend>New demand</legend>
-      <label for="propose-title">Short title</label>
-      <input type="text" id="propose-title" required maxlength="80" placeholder="Public timeline for the audit">
-      <label for="propose-text">What exactly are you asking for?</label>
-      <textarea id="propose-text" required maxlength="500" placeholder="Be specific. This becomes the message sent to public authorities."></textarea>
-      <div class="btn-row">
-        <button class="btn btn-primary" type="submit">Add</button>
-        <button class="btn" type="button" id="propose-cancel">Cancel</button>
-      </div>
-    </fieldset>
+  <form id="propose-form" hidden style="border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin-bottom:18px;">
+    <label for="p-title">What are you asking for?</label>
+    <input type="text" id="p-title" maxlength="120" required placeholder="Independent probe into the exam leak">
+    <p class="field-note">One clear ask, 8 to 120 characters.</p>
+
+    <label for="p-body">Say it the way it should be sent</label>
+    <textarea id="p-body" maxlength="1000" required placeholder="An independent, time-bound investigation into how the paper leaked, with findings made public."></textarea>
+    <p class="field-note">This becomes the message sent to officials. 20 to 1000 characters.</p>
+
+    <div class="btn-row" style="margin-top:0;">
+      <button type="submit" class="btn btn-primary" id="propose-submit">Send to the queue</button>
+      <button type="button" class="btn" id="propose-cancel">Cancel</button>
+    </div>
+    <p class="field-note" style="margin-top:12px; margin-bottom:0;">Organizers read the queue and publish what belongs on the list.</p>
   </form>
 
-  <h2 style="margin-top:28px;">On the board</h2>
-  <p style="font-size:14px; color:var(--text-muted); margin-top:-10px;">Same idea as sticky notes at the protest site. Collect, tally, post the leaderboard, run it again.</p>
-  <ul class="demand-list" id="demand-list" aria-live="polite"></ul>
-
-  <hr class="divider">
-
-  <h2>How's everyone feeling</h2>
-  <div class="channel-row" id="mood-buttons"></div>
-  <div id="mood-tally" style="margin-top:14px; font-size:13px; color:var(--text-muted); font-family:var(--font-mono);"></div>
+  <ul class="demand-list" id="demand-list" aria-live="polite">
+    <li class="skeleton"></li>
+    <li class="skeleton"></li>
+    <li class="skeleton"></li>
+  </ul>
 </main>
 
 <footer class="site">
   <div class="wrap">
-    <span>Stored only on this device. No account, no server.</span>
+    <div>Your vote is tied to this device. No name, no phone number, no account.</div>
+    <div><a href="moderate.html">Organizer sign-in</a></div>
   </div>
 </footer>
 
-<script src="js/theme.js"></script>
-<script src="js/store.js"></script>
-<script src="js/sync.js"></script>
-<script src="js/demands-page.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("propose-toggle").addEventListener("click", function () {
-      document.getElementById("propose-form").hidden = false;
-      this.hidden = true;
-    });
-    document.getElementById("propose-cancel").addEventListener("click", function () {
-      document.getElementById("propose-form").hidden = true;
-      document.getElementById("propose-toggle").hidden = false;
-    });
-  });
-</script>
-<script src="js/sw-register.js"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/theme.js?v=5"></script>
+<script src="js/sb.js?v=5"></script>
+<script src="js/outbox.js?v=5"></script>
+<script src="js/store.js?v=5"></script>
+<script src="js/demands-page.js?v=5"></script>
+<script src="js/sw-register.js?v=5"></script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+name: Snapshot demands
+
+# Publishes the approved demand list from Supabase into data/demands.json.
+#
+# This is the piece that makes the whole thing scale: every visitor reads the
+# committed snapshot from the GitHub Pages CDN instead of hitting the database
+# for the list. It is also the audit trail - every change to what the public
+# sees arrives as a commit you can diff and revert.
+#
+# Required repository secrets (Settings > Secrets and variables > Actions):
+#   SUPABASE_URL          https://<project-ref>.supabase.co
+#   SUPABASE_SERVICE_KEY  the service_role / sb_secret_ key. NEVER put this in
+#                         js/config.js - it bypasses row-level security.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/snapshot.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch approved demands
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_SERVICE_KEY:-}" ]; then
+            echo "Supabase secrets are not set yet; leaving the committed snapshot alone."
+            exit 0
+          fi
+
+          http_code=$(curl -sS -o /tmp/snapshot.json -w '%{http_code}' \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/public_snapshot" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"p_chapter":"default"}')
+
+          if [ "$http_code" != "200" ]; then
+            echo "Supabase returned HTTP $http_code:"
+            cat /tmp/snapshot.json
+            exit 1
+          fi
+
+          # Refuse to publish an empty or malformed list. Overwriting a good
+          # snapshot with [] because of a transient fault would take the public
+          # demand list down, and Pages would happily serve the emptiness.
+          python3 - <<'PY'
+          import json, sys, datetime
+          raw = json.load(open("/tmp/snapshot.json"))
+          if not isinstance(raw, dict) or "demands" not in raw:
+              sys.exit("unexpected payload shape: %r" % (raw,))
+          if not raw["demands"]:
+              sys.exit("snapshot came back empty; refusing to overwrite")
+          raw["updated"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+          with open("data/demands.json", "w", encoding="utf-8") as f:
+              json.dump(raw, f, ensure_ascii=False, indent=2)
+              f.write("\n")
+          print("wrote %d demands" % len(raw["demands"]))
+          PY
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/demands.json; then
+            echo "No change."
+            exit 0
+          fi
+          git config user.name  "cockroach-action-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/demands.json
+          git commit -m "Snapshot approved demands [skip ci]"
+          git push

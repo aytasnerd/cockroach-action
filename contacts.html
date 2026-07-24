@@ -3,11 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contacts, Cockroach Action</title>
+<title>Contacts — Cockroach Action</title>
+<link rel="canonical" href="https://aytasnerd.github.io/cockroach-action/contacts.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cockroach Action">
+<meta property="og:url" content="https://aytasnerd.github.io/cockroach-action/contacts.html">
+<meta property="og:title" content="Contacts — Cockroach Action">
+<meta property="og:description" content="Public grievance channels and your chapter's own representatives, with the official portals to file through.">
+<meta property="og:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aytasnerd.github.io/cockroach-action/icons/og.png">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192.png">
-<meta name="theme-color" content="#533a75">
-<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#fbfaf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="css/style.css?v=5">
 <script>
   (function(){var t=localStorage.getItem("ca_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);})();
 </script>
@@ -15,7 +27,7 @@
 <body>
 <header class="site">
   <div class="site-header-inner">
-    <a class="brand" href="index.html"><span class="mark">C</span><span class="brand-text"> Cockroach Action</span></a>
+    <a class="brand" href="index.html"><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.2C8.5 2.6 7 1.9 5.4 1.8"/><path d="M14 4.2c1.5-1.6 3-2.3 4.6-2.4"/><ellipse cx="12" cy="6.2" rx="2.5" ry="2"/><path d="M12 8.2c3.6 0 5 2.8 5 6.2 0 4-2.2 7.2-5 7.2s-5-3.2-5-7.2c0-3.4 1.4-6.2 5-6.2Z"/><path d="M12 9.6v10"/><path d="M7.4 10.6 3.0 7.8"/><path d="M6.9 14.4 2.3 14.1"/><path d="M7.6 18 3.7 21.0"/><path d="M16.6 10.6 21.0 7.8"/><path d="M17.1 14.4 21.7 14.1"/><path d="M16.4 18 20.3 21.0"/></svg><span class="brand-text">Cockroach Action</span></a>
     <nav class="primary" aria-label="Primary">
       <a href="index.html">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
@@ -37,7 +49,6 @@
     <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
   </div>
 </header>
-<div class="path-bar"><div class="wrap">~/cockroach-action/contacts</div></div>
 
 <main>
   <h1>Contacts</h1>
@@ -51,13 +62,16 @@
   </div>
 </footer>
 
-<script src="js/theme.js"></script>
-<script src="js/store.js"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/theme.js?v=5"></script>
+<script src="js/sb.js?v=5"></script>
+<script src="js/outbox.js?v=5"></script>
+<script src="js/store.js?v=5"></script>
 <script>
   async function loadContacts() {
     var el = document.getElementById("contact-groups");
     try {
-      var json = await CAStore.cachedJsonFetch("data/contacts.json", "ca_contacts_cache");
+      var json = await CAStore.cachedJson("data/contacts.json", "ca_contacts_cache");
       if (!json) throw new Error("no cached copy yet");
       el.innerHTML = "";
       json.groups.forEach(function (g) {
@@ -85,6 +99,6 @@
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
   document.addEventListener("DOMContentLoaded", loadContacts);
 </script>
-<script src="js/sw-register.js"></script>
+<script src="js/sw-register.js?v=5"></script>
 </body>
 </html>

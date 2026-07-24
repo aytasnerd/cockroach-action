@@ -1,17 +1,21 @@
 (function () {
+  var demands = [];
+  var rtiTemplate = null;
+
+  function el(id) { return document.getElementById(id); }
+
   function escapeHtml(s) {
-    var div = document.createElement("div");
-    div.textContent = s;
-    return div.innerHTML;
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : s;
+    return d.innerHTML;
   }
 
   function paramDemandId() {
-    var params = new URLSearchParams(window.location.search);
-    return params.get("demand");
+    return new URLSearchParams(window.location.search).get("demand");
   }
 
-  function buildPicker(demands, selectedId) {
-    var sel = document.getElementById("demand-picker");
+  function buildPicker(selectedId) {
+    var sel = el("demand-picker");
     sel.innerHTML = "";
     demands.forEach(function (d) {
       var opt = document.createElement("option");
@@ -22,117 +26,154 @@
     });
   }
 
-  function renderTemplates(demand) {
-    document.getElementById("template-preview").textContent = CAActions.messageFor(demand);
-    document.getElementById("tweet-preview").textContent = CAActions.tweetFor(demand);
-
-    var phone = document.getElementById("target-phone").value.trim();
-    var email = document.getElementById("target-email").value.trim();
-
-    document.getElementById("wa-link").href = CAActions.whatsappLink(demand, phone);
-    document.getElementById("mail-link").href = CAActions.mailtoLink(demand, email);
-    document.getElementById("tweet-link").href = CAActions.tweetLink(demand);
-  }
-
-  function currentDemand(demands) {
-    var sel = document.getElementById("demand-picker");
+  function currentDemand() {
+    var sel = el("demand-picker");
     return demands.find(function (d) { return d.id === sel.value; }) || demands[0];
   }
 
-  async function loadContacts() {
+  function renderTemplates() {
+    var demand = currentDemand();
+    if (!demand) return;
+
+    el("template-preview").textContent = CAActions.messageFor(demand);
+    el("tweet-preview").textContent = CAActions.tweetFor(demand);
+
+    var phone = el("target-phone").value.trim();
+    var email = el("target-email").value.trim();
+
+    el("wa-link").href = CAActions.whatsappLink(demand, phone);
+    el("mail-link").href = CAActions.mailtoLink(demand, email);
+    el("tweet-link").href = CAActions.tweetLink(demand);
+
+    renderRti(demand);
+  }
+
+  // The RTI letter is a skeleton with tokens in it. Filling the demand in is
+  // the whole point of generating it per demand - the old build rendered the
+  // same generic text no matter which demand was picked.
+  function renderRti(demand) {
+    var preview = el("rti-preview");
+    if (!rtiTemplate || !preview || !demand) return;
+    preview.textContent = rtiTemplate.body
+      .replace(/\{\{DEMAND_TITLE\}\}/g, demand.title)
+      .replace(/\{\{DEMAND_TEXT\}\}/g, demand.text);
+  }
+
+  // Copy with a real fallback: the Clipboard API is unavailable in insecure
+  // contexts and can be refused outright, and silently doing nothing is worse
+  // than telling someone to copy it themselves.
+  async function copyFrom(sourceId, feedbackId) {
+    var text = el(sourceId).textContent;
+    var fb = el(feedbackId);
     try {
-      var json = await CAStore.cachedJsonFetch("data/contacts.json", "ca_contacts_cache");
-      if (!json) throw new Error("no cached copy yet");
-      var sel = document.getElementById("contact-picker");
-      sel.innerHTML = '<option value="">Choose a saved contact (optional)</option>';
-      json.groups.forEach(function (g) {
-        var group = document.createElement("optgroup");
-        group.label = g.group;
-        g.contacts.forEach(function (c) {
-          if (!c.email && !c.phone) return;
-          var opt = document.createElement("option");
-          opt.value = JSON.stringify({ email: c.email, phone: c.phone });
-          opt.textContent = c.name;
-          group.appendChild(opt);
-        });
-        if (group.children.length) sel.appendChild(group);
-      });
-      sel.addEventListener("change", function () {
-        if (!sel.value) return;
-        var c = JSON.parse(sel.value);
-        document.getElementById("target-email").value = c.email || "";
-        document.getElementById("target-phone").value = c.phone || "";
-        renderTemplates(currentDemand(CAStore.getDemands()));
-      });
+      if (!navigator.clipboard) throw new Error("no clipboard");
+      await navigator.clipboard.writeText(text);
+      fb.textContent = "Copied";
     } catch (e) {
-      // offline with no cached copy yet. Contact picker just stays empty, manual entry still works.
+      var node = el(sourceId);
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      fb.textContent = "Selected — press Copy";
     }
+    fb.classList.add("show");
+    setTimeout(function () { fb.classList.remove("show"); }, 2200);
   }
 
-  function renderRti(demand, template) {
-    var body = template.body;
-    document.getElementById("rti-preview").textContent = body;
+  function downloadText(text, filename) {
+    var blob = new Blob([text], { type: "text/plain" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    // Safari may not have started the transfer when click() returns; revoking
+    // straight away cancels the download.
+    setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
   }
 
-  async function loadRtiTemplate() {
-    return await CAStore.cachedJsonFetch("data/rti-template.json", "ca_rti_cache");
+  async function loadContacts() {
+    var json = await CAStore.cachedJson("data/contacts.json", "ca_contacts_cache");
+    if (!json) return;
+    var sel = el("contact-picker");
+    sel.innerHTML = '<option value="">Choose a saved contact (optional)</option>';
+    (json.groups || []).forEach(function (g) {
+      var group = document.createElement("optgroup");
+      group.label = g.group;
+      (g.contacts || []).forEach(function (c) {
+        if (!c.email && !c.phone) return;
+        var opt = document.createElement("option");
+        opt.value = JSON.stringify({ email: c.email, phone: c.phone });
+        opt.textContent = c.name;
+        group.appendChild(opt);
+      });
+      if (group.children.length) sel.appendChild(group);
+    });
+    sel.addEventListener("change", function () {
+      if (!sel.value) return;
+      var c = JSON.parse(sel.value);
+      el("target-email").value = c.email || "";
+      el("target-phone").value = c.phone || "";
+      renderTemplates();
+    });
   }
 
   document.addEventListener("DOMContentLoaded", async function () {
-    await CAStore.ensureSeeded();
-    var demands = CAStore.getDemands();
-    if (!demands.length) return;
+    demands = CAStore.getDemands();
+    if (!demands.length) {
+      try { demands = await CAStore.refresh(); } catch (e) { /* offline, nothing cached */ }
+    }
+    if (!demands.length) {
+      var main = document.querySelector("main");
+      if (main) main.insertAdjacentHTML("afterbegin",
+        '<div class="empty">No demands saved on this phone yet. Open this page once with a connection.</div>');
+      return;
+    }
 
-    buildPicker(demands, paramDemandId());
-    renderTemplates(currentDemand(demands));
-    loadContacts();
+    buildPicker(paramDemandId());
 
-    document.getElementById("demand-picker").addEventListener("change", function () {
-      renderTemplates(currentDemand(demands));
-    });
-    document.getElementById("target-phone").addEventListener("input", function () {
-      renderTemplates(currentDemand(demands));
-    });
-    document.getElementById("target-email").addEventListener("input", function () {
-      renderTemplates(currentDemand(demands));
-    });
-
-    var rtiTemplate = await loadRtiTemplate();
-    if (rtiTemplate) {
-      document.getElementById("rti-guidance").innerHTML = rtiTemplate.guidance
+    rtiTemplate = await CAStore.cachedJson("data/rti-template.json", "ca_rti_cache");
+    if (rtiTemplate && el("rti-guidance")) {
+      el("rti-guidance").innerHTML = (rtiTemplate.guidance || [])
         .map(function (g) { return "<li>" + escapeHtml(g) + "</li>"; })
         .join("");
-      var renderRtiNow = function () { renderRti(currentDemand(demands), rtiTemplate); };
-      renderRtiNow();
-      document.getElementById("demand-picker").addEventListener("change", renderRtiNow);
+    }
 
-      document.getElementById("copy-rti").addEventListener("click", function () {
-        navigator.clipboard.writeText(document.getElementById("rti-preview").textContent).then(function () {
-          var fb = document.getElementById("rti-copy-feedback");
-          fb.classList.add("show");
-          setTimeout(function () { fb.classList.remove("show"); }, 1800);
-        });
-      });
+    renderTemplates();
+    loadContacts();
 
-      document.getElementById("download-rti").addEventListener("click", function () {
-        var blob = new Blob([document.getElementById("rti-preview").textContent], { type: "text/plain" });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "rti-application.txt";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+    el("demand-picker").addEventListener("change", renderTemplates);
+    el("target-phone").addEventListener("input", renderTemplates);
+    el("target-email").addEventListener("input", renderTemplates);
+
+    el("copy-message").addEventListener("click", function () {
+      copyFrom("template-preview", "msg-copy-feedback");
+    });
+
+    if (el("copy-rti")) {
+      el("copy-rti").addEventListener("click", function () {
+        copyFrom("rti-preview", "rti-copy-feedback");
       });
     }
 
-    document.getElementById("copy-message").addEventListener("click", function () {
-      navigator.clipboard.writeText(document.getElementById("template-preview").textContent).then(function () {
-        var fb = document.getElementById("msg-copy-feedback");
-        fb.classList.add("show");
-        setTimeout(function () { fb.classList.remove("show"); }, 1800);
+    if (el("download-rti")) {
+      el("download-rti").addEventListener("click", function () {
+        downloadText(el("rti-preview").textContent, "rti-application.txt");
       });
-    });
+    }
+  });
+
+  // Refresh the picker if the list changes underneath us.
+  document.addEventListener("ca:demands-changed", function () {
+    var keep = el("demand-picker") && el("demand-picker").value;
+    demands = CAStore.getDemands();
+    if (demands.length && el("demand-picker")) {
+      buildPicker(keep || paramDemandId());
+      renderTemplates();
+    }
   });
 })();
