@@ -144,6 +144,13 @@
     el("target-email").addEventListener("input", updateSendLinks);
     el("template-preview").addEventListener("input", updateSendLinks);
 
+    ["wa-link", "mail-link"].forEach(function (id) {
+      var a = el(id);
+      if (a) a.addEventListener("click", function () {
+        if (window.CAShare) setTimeout(function () { CAShare.afterSend(currentDemand()); }, 500);
+      });
+    });
+
     el("copy-message").addEventListener("click", function () { copyFrom("template-preview", "msg-copy-feedback"); });
     if (el("copy-rti")) el("copy-rti").addEventListener("click", function () { copyFrom("rti-preview", "rti-copy-feedback"); });
     if (el("download-rti")) el("download-rti").addEventListener("click", function () { downloadText(el("rti-preview").value, "rti-application.txt"); });

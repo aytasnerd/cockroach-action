@@ -18,6 +18,12 @@
 
   function currentMessage() { return msgEl.value; }
 
+  function seededDemand() {
+    var id = seedEl && seedEl.value;
+    if (!id) return undefined;
+    return (CAStore.getDemands() || []).find(function (d) { return d.id === id; });
+  }
+
   function seedMessage() {
     var id = seedEl.value;
     if (!id) { msgEl.value = GENERAL_DRAFT; return; }
@@ -124,11 +130,13 @@
 
     if (kind === "wa") {
       t.href = CAActions.whatsappLink(text, t.getAttribute("data-num"));
+      if (window.CAShare) setTimeout(function () { CAShare.afterSend(seededDemand()); }, 600);
       return; // let the anchor open
     }
     if (kind === "mail") {
       e.preventDefault();
       window.location.href = CAActions.mailtoLink(text, t.getAttribute("data-email"), t.getAttribute("data-subject"));
+      if (window.CAShare) setTimeout(function () { CAShare.afterSend(seededDemand()); }, 600);
       return;
     }
     if (kind === "copy") {

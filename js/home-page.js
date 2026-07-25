@@ -1,53 +1,56 @@
 (function () {
-  var SHARE_TEXT = "One list of demands, voted on together, sent straight to the offices that can answer:";
+  // Rotating agitprop kicker. Changes every load, so the page never feels
+  // static, and it seeds a rotating bank of protest + search phrases. The
+  // static <h1>, <title> and meta carry the real SEO weight; this is spice.
+  var KICKERS = [
+    "The paper leaked. The people didn't.",
+    "NTA exam leak. Nobody forgets.",
+    "Re-exam. Answers. Accountability.",
+    "One leak. A whole generation cheated.",
+    "They hoped we'd move on. We didn't.",
+    "Every vote is a name they can't ignore.",
+    "Students remember. Make them answer.",
+    "Paper-leak protest, one tap at a time.",
+    "No leader to arrest. No account to ban.",
+    "RTI. Re-exam. Resignations.",
+    "The exam was rigged. The demand isn't.",
+    "Cut the power. The list survives.",
+  ];
 
-  function shareUrl() {
-    return location.href.split("#")[0].replace(/index\.html$/, "");
+  function paintKicker() {
+    var k = document.getElementById("kicker");
+    if (k) k.textContent = KICKERS[Math.floor(Math.random() * KICKERS.length)];
   }
 
   function paintStats() {
     var list = CAStore.getDemands();
-    if (!list.length) return;
+    if (!list.length) return; // keep the seeded floor already in the HTML
     var votes = list.reduce(function (sum, d) { return sum + (d.votes || 0); }, 0);
     document.getElementById("stat-demands").textContent = list.length;
-    document.getElementById("stat-votes").textContent = votes.toLocaleString();
-    // stat-mps is a static count of the MP roll; leave it as authored.
+    document.getElementById("stat-votes").textContent = votes.toLocaleString("en-IN");
+  }
+
+  function total() {
+    return CAStore.getDemands().reduce(function (s, d) { return s + (d.votes || 0); }, 0);
   }
 
   function wireShare() {
-    var url = shareUrl();
-    var msg = SHARE_TEXT + " " + url;
-    document.getElementById("share-wa").href = "https://wa.me/?text=" + encodeURIComponent(msg);
-    document.getElementById("share-x").href =
-      "https://twitter.com/intent/tweet?text=" + encodeURIComponent(SHARE_TEXT) + "&url=" + encodeURIComponent(url);
-
-    var copyBtn = document.getElementById("share-copy");
-    var feedback = document.getElementById("share-feedback");
-
-    copyBtn.addEventListener("click", async function () {
-      // The native share sheet is much better on a phone, so prefer it.
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: "Cockroach Action", text: SHARE_TEXT, url: url });
-          return;
-        } catch (e) {
-          if (e && e.name === "AbortError") return; // user dismissed, not an error
-        }
-      }
-      try {
-        await navigator.clipboard.writeText(url);
-        feedback.textContent = "Copied";
-      } catch (e) {
-        // Clipboard is blocked in some browsers and in insecure contexts.
-        // Say so rather than looking like nothing happened.
-        feedback.textContent = "Press and hold the address bar to copy";
-      }
-      feedback.classList.add("show");
-      setTimeout(function () { feedback.classList.remove("show"); }, 2400);
+    var openGeneral = function () {
+      if (window.CAShare) CAShare.openSheet({
+        total: total(),
+        eyebrow: "Pass it on",
+        title: "Send it to three people",
+        body: "This only works because it spreads. One forward can reach a whole group.",
+      });
+    };
+    ["share-wa", "share-x", "share-copy"].forEach(function (id) {
+      var b = document.getElementById(id);
+      if (b) b.addEventListener("click", function (e) { e.preventDefault(); openGeneral(); });
     });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    paintKicker();
     wireShare();
     paintStats();
     CAStore.refresh().then(paintStats).catch(function () {});

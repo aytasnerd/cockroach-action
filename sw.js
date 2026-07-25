@@ -4,7 +4,7 @@
 // Bump CACHE whenever the shell changes, otherwise installed copies keep
 // serving the old files.
 
-var CACHE = "cockroach-action-v9";
+var CACHE = "cockroach-action-v10";
 
 var ASSETS = [
   "./",
@@ -14,11 +14,16 @@ var ASSETS = [
   "contacts.html",
   "moderate.html",
   "css/style.css",
+  "fonts/anton-400.woff2",
+  "fonts/archivo-400.woff2",
+  "fonts/archivo-600.woff2",
+  "fonts/archivo-700.woff2",
   "js/config.js",
   "js/theme.js",
   "js/sb.js",
   "js/outbox.js",
   "js/store.js",
+  "js/share.js",
   "js/actions.js",
   "js/home-page.js",
   "js/demands-page.js",

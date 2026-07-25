@@ -48,7 +48,8 @@
       '<div class="demand-body">' +
         '<h3>' + esc(d.title) + '</h3>' +
         '<p>' + esc(d.text) + '</p>' +
-        '<div class="demand-meta"><a href="act.html?demand=' + encodeURIComponent(d.id) + '">Act on this &rarr;</a></div>' +
+        '<div class="demand-meta"><a href="act.html?demand=' + encodeURIComponent(d.id) + '">Act on this &rarr;</a>' +
+          '<button class="textlink share-link" data-share="' + esc(d.id) + '">Share</button></div>' +
       '</div>' +
     '</li>';
   }
@@ -126,7 +127,16 @@
     btn.disabled = true;
     try {
       var res = await CAStore.toggleVote(id);
+      var nowVoted = !!CAStore.getMyVotes()[id];
       notice(res.queued ? "Saved on this phone. It'll send when you're back online." : null);
+      if (nowVoted) {
+        // Peak moment: they just backed it and the number ticked up. Bump the
+        // count, then hand them the share.
+        var countEl = btn.parentNode.querySelector(".vote-count");
+        if (countEl) { countEl.classList.remove("bump"); void countEl.offsetWidth; countEl.classList.add("bump"); }
+        var d = CAStore.getDemands().find(function (x) { return x.id === id; });
+        if (d && window.CAShare) CAShare.afterVote(d);
+      }
     } catch (err) {
       var msg = /slow down/i.test(err.message || "")
         ? "That's a lot of taps. Give it a second."
@@ -158,7 +168,8 @@
       document.getElementById("propose-form").hidden = true;
       notice(res.queued
         ? "Saved on this phone. It'll go to the queue when you're back online."
-        : "Added to Proposed below. Back it, and share it. Organizers publish what gets traction.");
+        : "It's on the list. Get it backed.");
+      if (!res.queued && window.CAShare) CAShare.afterPropose({ title: title, votes: 0 });
       CAStore.refresh().catch(function () {});
     } catch (err) {
       var setup = err.code === "PGRST202" || err.code === "PGRST205" || /does not exist|schema cache/i.test(err.message || "");
@@ -213,6 +224,12 @@
     document.getElementById("accepted-list").addEventListener("click", voteClick);
     document.getElementById("proposed-list").addEventListener("click", voteClick);
     function voteClick(e) {
+      var share = e.target.closest("[data-share]");
+      if (share && window.CAShare) {
+        var d = CAStore.getDemands().find(function (x) { return x.id === share.getAttribute("data-share"); });
+        if (d) CAShare.openSheet({ demand: d, eyebrow: "Spread it", title: "Send this demand", body: "Drop it in a group. Every forward is another name they can't ignore." });
+        return;
+      }
       var btn = e.target.closest("[data-vote]");
       if (btn) onVote(btn.getAttribute("data-vote"), btn);
     }

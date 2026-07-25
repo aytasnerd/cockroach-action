@@ -6,16 +6,41 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#fbfaf9",
-  "theme_color": "#533a75",
-  "categories": ["social", "government", "productivity"],
+  "background_color": "#f4ede0",
+  "theme_color": "#b23a15",
+  "categories": [
+    "social",
+    "government",
+    "productivity"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Demands", "url": "./demands.html" },
-    { "name": "Take action", "url": "./act.html" }
+    {
+      "name": "Demands",
+      "url": "./demands.html"
+    },
+    {
+      "name": "Take action",
+      "url": "./act.html"
+    }
   ]
 }
